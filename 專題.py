@@ -1,3 +1,9 @@
+"""
+Created on Thu Feb 14 21:15:03 2019
+
+@author: Hank
+"""
+
 import sys, os, random
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import *
@@ -31,7 +37,6 @@ class Process_Button(QPushButton):
     def __init__(self, title, parent):
         super().__init__(title, parent)
         
-
 # =============================================================================
 #     def mouseMoveEvent(self, e):
 # 
@@ -122,7 +127,8 @@ class AppForm(QMainWindow):
         self.fig = Figure((5.0, 4.0), dpi=self.dpi)
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.main_frame)
-        
+        self.canvas2 = FigureCanvas(self.fig)
+
 
         hbox = QVBoxLayout()
         Button_box = QVBoxLayout()
@@ -174,6 +180,7 @@ class AppForm(QMainWindow):
         #Hbox.addLayout(hbox)
 
         Hbox.addWidget(self.leftwidget)
+        Hbox.addWidget(self.canvas2)
         Hbox.addWidget(self.canvas)
     
         self.main_frame.setLayout(Hbox)
@@ -193,7 +200,9 @@ class AppForm(QMainWindow):
         self.leftwidget.button.setGeometry(240, 30, 210, 30)
         self.leftwidget.button.position.setX(240)
         self.leftwidget.button.position.setY(30)
+        
         self.leftwidget.button.show()
+        
     def add_End(self):
         self.End_Action.setCheckable(True)
         self.Start_Action.setCheckable(False)
@@ -208,6 +217,7 @@ class AppForm(QMainWindow):
         self.leftwidget.button.setGeometry(240, 30, 210, 30)
         self.leftwidget.button.position.setX(240)
         self.leftwidget.button.position.setY(30)
+        
         self.leftwidget.button.show()
     
     def add_Process(self, name):
@@ -241,6 +251,7 @@ class AppForm(QMainWindow):
         self.leftwidget.button.setGeometry(240, 30, 210, 30)
         self.leftwidget.button.position.setX(240)
         self.leftwidget.button.position.setY(30)
+        
         self.leftwidget.button.show()
 
     def add_Loop(self):
@@ -257,6 +268,7 @@ class AppForm(QMainWindow):
         self.leftwidget.button.setGeometry(240, 30, 210, 30)
         self.leftwidget.button.position.setX(240)
         self.leftwidget.button.position.setY(30)
+        
         self.leftwidget.button.show()
         
     def create_menu(self):        
