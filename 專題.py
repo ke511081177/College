@@ -1,15 +1,9 @@
-"""
-Created on Thu Feb 14 21:15:03 2019
-
-@author: Hank
-"""
-
 import sys, os, random
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QAction, QMenu, QLineEdit, QComboBox, QDialogButtonBox, QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QCheckBox, QWidget, QApplication, QInputDialog, QVBoxLayout, QFormLayout, QHBoxLayout, QGraphicsLineItem, QStyleOptionGraphicsItem, QDialog
+
 
 import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -18,9 +12,11 @@ from matplotlib.figure import Figure
 from PyQt5.QtGui import QDrag
 from PyQt5.QtCore import Qt, QMimeData
 
+# =============================================================================
+# from PyQt5.QtWidgets import QAction, QMenu, QLineEdit, QComboBox, QDialogButtonBox, QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QCheckBox, QWidget, QApplication, QInputDialog, QVBoxLayout, QFormLayout, QHBoxLayout, QGraphicsLineItem, QStyleOptionGraphicsItem, QDialog
+# =============================================================================
 
         
-
 
 class Process_Button(QPushButton):
     global buttonlist
@@ -84,6 +80,15 @@ class Process_Button(QPushButton):
             print('press')
 
 
+class Dialog(QDialog):
+    def __init__(self, parent=None):
+            QDialog.__init__(self, parent)
+            self.resize(240, 200)
+            self.exec()
+            print("press")
+            
+            
+
             
 class AppForm(QMainWindow):
     def __init__(self, parent=None):
@@ -93,7 +98,7 @@ class AppForm(QMainWindow):
         self.setAcceptDrops(True)
         self.create_menu()
         self.create_main_frame()
-
+        
     def dragEnterEvent(self, e):
         e.accept()
 
@@ -111,15 +116,13 @@ class AppForm(QMainWindow):
         
         openfile_path = QFileDialog.getOpenFileName(self,'選擇文件','',"PNG (*.png)|*.png")
     
-    
     def on_about(self):
         msg ="""
         
-        *可以把開個照片，然後丟進來拉來拉去這樣。
+        *專題，加油。
         """
         QMessageBox.about(self, "簡介", msg.strip())
-
-
+    
     def create_main_frame(self):
         self.main_frame = QWidget()
 
@@ -130,56 +133,62 @@ class AppForm(QMainWindow):
         self.canvas2 = FigureCanvas(self.fig)
 
 
-        hbox = QVBoxLayout()
+        hbox = QHBoxLayout()
         Button_box = QVBoxLayout()
         self.leftwidget = QWidget()
         
 
         
+        self.Start_Button = QPushButton("Start")   
+        self.Start_Button.setCheckable(True)
+        self.Start_Button.clicked.connect(self.add_Start)
+        self.End_Button = QPushButton("End")
+        self.End_Button.setCheckable(True)
+        self.End_Button.clicked.connect(self.add_End)
+        self.Process_Button = QPushButton("Process")
+        self.Process_Button.setCheckable(True)
+        self.Process_Button.clicked.connect(self.add_Process)
+        self.Loop_Button = QPushButton("Loop")
+        self.Loop_Button.setCheckable(True)
+        self.Loop_Button.clicked.connect(self.add_Loop)
+        self.Decision_Button = QPushButton("Decision")
+        self.Decision_Button.setCheckable(True)
+        self.Decision_Button.clicked.connect(self.add_Decision)
+        
+        for w in [  self.Start_Button, self.End_Button, self.Loop_Button,
+                    self.Decision_Button]:
+            Button_box.addWidget(w)
+            Button_box.setAlignment(w, Qt.AlignVCenter)
+        
 # =============================================================================
-#         self.Start_Button = QPushButton("Start")   
-#         self.Start_Button.setCheckable(True)
-#         self.End_Button = QPushButton("End")
-#         self.End_Button.setBackgroundRole
-#         self.End_Button.setCheckable(True)
-#         self.Process_Button = QPushButton("Process")
-#         self.Process_Button.setCheckable(True)
-#         self.Loop_Button = QPushButton("Loop")
-#         self.Loop_Button.setCheckable(True)
-#         self.Decision_Button = QPushButton("Decision")
-#         self.Decision_Button.setCheckable(True)
-#         
-#         for w in [  self.Start_Button, self.End_Button, self.Loop_Button,
-#                     self.Decision_Button]:
-#             hbox.addWidget(w)
-#             hbox.setAlignment(w, Qt.AlignVCenter)
+#         toolbarBox = QtWidgets.QToolBar(self)
+#         toolbarBox.setFixedWidth(180)
+#         toolbarBox.setMovable(False)
+#         self.addToolBar(QtCore.Qt.LeftToolBarArea, toolbarBox)
+#         self.Start_Action = toolbarBox.addAction('Start')
+#         self.Start_Action.triggered.connect(self.add_Start)
+#         self.Start_Action.setCheckable(True)
+#         self.End_Action = toolbarBox.addAction('End')
+#         self.End_Action.triggered.connect(self.add_End)
+#         self.End_Action.setCheckable(True)
+#         self.Decision_Action = toolbarBox.addAction('Decision')
+#         self.Decision_Action.triggered.connect(self.add_Decision)
+#         self.Decision_Action.setCheckable(True)
+#         self.Loop_Action = toolbarBox.addAction('Loop')
+#         self.Loop_Action.triggered.connect(self.add_Loop)
+#         self.Loop_Action.setCheckable(True)
+#         self.Process_Action = toolbarBox.addAction('Process')
+#         self.Process_Action.triggered.connect(self.add_Process)
+#         self.Process_Action.setCheckable(True)
 # =============================================================================
         
-        toolbarBox = QtWidgets.QToolBar(self)
-        toolbarBox.setFixedWidth(180)
-        toolbarBox.setMovable(False)
-        self.addToolBar(QtCore.Qt.LeftToolBarArea, toolbarBox)
-        self.Start_Action = toolbarBox.addAction('Start')
-        self.Start_Action.triggered.connect(self.add_Start)
-        self.Start_Action.setCheckable(True)
-        self.End_Action = toolbarBox.addAction('End')
-        self.End_Action.triggered.connect(self.add_End)
-        self.End_Action.setCheckable(True)
-        self.Decision_Action = toolbarBox.addAction('Decision')
-        self.Decision_Action.triggered.connect(self.add_Decision)
-        self.Decision_Action.setCheckable(True)
-        self.Loop_Action = toolbarBox.addAction('Loop')
-        self.Loop_Action.triggered.connect(self.add_Loop)
-        self.Loop_Action.setCheckable(True)
-        self.Process_Action = toolbarBox.addAction('Process')
-        self.Process_Action.triggered.connect(self.add_Process)
-        self.Process_Action.setCheckable(True)
-       
+        hbox.addLayout(Button_box)
         Hbox = QHBoxLayout()
-        #vbox.addWidget(Button_box)
-        #Hbox.addLayout(hbox)
+# =============================================================================
+#         Hbox.addWidget(self.leftwidget)
+# =============================================================================
+        Hbox.addLayout(hbox)
 
-        Hbox.addWidget(self.leftwidget)
         Hbox.addWidget(self.canvas2)
         Hbox.addWidget(self.canvas)
     
@@ -187,85 +196,101 @@ class AppForm(QMainWindow):
         self.setCentralWidget(self.main_frame)
     
     def add_Start(self):
-        self.Start_Action.setCheckable(True)
-        self.End_Action.setCheckable(False)
-        self.Decision_Action.setCheckable(False)
-        self.Loop_Action.setCheckable(False)
-        self.Process_Action.setCheckable(False)
+# =============================================================================
+#         self.Start_Action.setCheckable(True)
+#         self.End_Action.setCheckable(False)
+#         self.Decision_Action.setCheckable(False)
+#         self.Loop_Action.setCheckable(False)
+#         self.Process_Action.setCheckable(False)
+# =============================================================================
         print("1234")
         self.leftwidget.button = Process_Button('Start', self)
         self.leftwidget.button.setStyleSheet("background-color: Gray")
         self.leftwidget.button.string = 'Start'
         self.leftwidget.button.ExtremePoint = 1
-        self.leftwidget.button.setGeometry(240, 30, 210, 30)
+        self.leftwidget.button.setGeometry(280, 40, 100, 30)
         self.leftwidget.button.position.setX(240)
         self.leftwidget.button.position.setY(30)
         
         self.leftwidget.button.show()
         
     def add_End(self):
-        self.End_Action.setCheckable(True)
-        self.Start_Action.setCheckable(False)
-        self.Decision_Action.setCheckable(False)
-        self.Loop_Action.setCheckable(False)
-        self.Process_Action.setCheckable(False)
+# =============================================================================
+#         self.End_Action.setCheckable(True)
+#         self.Start_Action.setCheckable(False)
+#         self.Decision_Action.setCheckable(False)
+#         self.Loop_Action.setCheckable(False)
+#         self.Process_Action.setCheckable(False)
+# =============================================================================
 
         self.leftwidget.button = Process_Button('End', self)
         self.leftwidget.button.setStyleSheet("background-color: Gray")
         self.leftwidget.button.string = 'Start'
         self.leftwidget.button.ExtremePoint = 1
-        self.leftwidget.button.setGeometry(240, 30, 210, 30)
+        self.leftwidget.button.setGeometry(280, 40, 100, 30)
         self.leftwidget.button.position.setX(240)
         self.leftwidget.button.position.setY(30)
         
         self.leftwidget.button.show()
     
     def add_Process(self, name):
-        self.Process_Action.setCheckable(True)
-        self.Start_Action.setCheckable(False)
-        self.End_Action.setCheckable(False)
-        self.Decision_Action.setCheckable(False)
-        self.Loop_Action.setCheckable(False)
+# =============================================================================
+#         self.Process_Action.setCheckable(True)
+#         self.Start_Action.setCheckable(False)
+#         self.End_Action.setCheckable(False)
+#         self.Decision_Action.setCheckable(False)
+#         self.Loop_Action.setCheckable(False)
+# =============================================================================
         print("1234")
         self.leftwidget.button = Process_Button('Process', self)
         self.leftwidget.button.setStyleSheet("background-color: Red")
         self.leftwidget.button.string = 'Start'
         self.leftwidget.button.ExtremePoint = 1
-        self.leftwidget.button.setGeometry(240, 30, 210, 30)
+        self.leftwidget.button.setGeometry(280, 40, 100, 30)
         self.leftwidget.button.position.setX(240)
         self.leftwidget.button.position.setY(30)
 
         self.leftwidget.button.show()
     
     def add_Decision(self):
-        self.Decision_Action.setCheckable(True)
-        self.Start_Action.setCheckable(False)
-        self.End_Action.setCheckable(False)
-        self.Loop_Action.setCheckable(False)
-        self.Process_Action.setCheckable(False)
+# =============================================================================
+#         self.Decision_Action.setCheckable(True)
+#         self.Start_Action.setCheckable(False)
+#         self.End_Action.setCheckable(False)
+#         self.Loop_Action.setCheckable(False)
+#         self.Process_Action.setCheckable(False)
+# =============================================================================
         print("1234")
         self.leftwidget.button = Process_Button('Decision', self)
         self.leftwidget.button.setStyleSheet("background-color: Pink")
         self.leftwidget.button.string = 'Start'
         self.leftwidget.button.ExtremePoint = 1
-        self.leftwidget.button.setGeometry(240, 30, 210, 30)
+        self.leftwidget.button.setGeometry(280, 40, 100, 30)
         self.leftwidget.button.position.setX(240)
         self.leftwidget.button.position.setY(30)
-        
+        self.leftwidget.button.clicked.connect(self.add)
+
         self.leftwidget.button.show()
 
+
+    def add(self):
+        dialog = Dialog(parent=self)
+        
+    
     def add_Loop(self):
-        self.Loop_Action.setCheckable(True)
-        self.Start_Action.setCheckable(False)
-        self.End_Action.setCheckable(False)
-        self.Decision_Action.setCheckable(False)
-        self.Process_Action.setCheckable(False)
+# =============================================================================
+#         self.Loop_Action.setCheckable(True)
+#         self.Start_Action.setCheckable(False)
+#         self.End_Action.setCheckable(False)
+#         self.Decision_Action.setCheckable(False)
+#         self.Process_Action.setCheckable(False)
+# =============================================================================
         print("1234")
         self.leftwidget.button = Process_Button('Loop', self)
         self.leftwidget.button.setStyleSheet("background-color: DodgerBlue")
         self.leftwidget.button.string = 'Start'
         self.leftwidget.button.ExtremePoint = 1
-        self.leftwidget.button.setGeometry(240, 30, 210, 30)
+        self.leftwidget.button.setGeometry(280, 40, 100, 30)
         self.leftwidget.button.position.setX(240)
         self.leftwidget.button.position.setY(30)
         
